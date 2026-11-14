@@ -10,6 +10,9 @@ export function TemplatePreviewPage() {
 
   if (!template) return <Navigate to="/mau-thiep" replace />;
 
+  // Mẫu có trang demo riêng toàn màn hình thì chuyển thẳng sang trang đó, không bọc trong khung preview
+  if (template.DemoPage) return <Navigate to={`/mau-thiep/${slug}/demo`} replace />;
+
   const { meta, Component } = template;
 
   return (

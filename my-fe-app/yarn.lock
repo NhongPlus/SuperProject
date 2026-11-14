@@ -43,6 +43,16 @@
   resolved "https://registry.yarnpkg.com/@floating-ui/utils/-/utils-0.2.12.tgz#afefe785949f16ac4cdd1e695935a321572dd56a"
   integrity sha512-HpCo8tmWzLVad5s2d19EhAz5zqrrQ6s69qd6moPMQvkOuSwDT1YgRfWSVuc4ennqrgv3OHppiOGMQ7oC13yIww==
 
+"@hugeicons/core-free-icons@^4.3.3":
+  version "4.4.0"
+  resolved "https://registry.yarnpkg.com/@hugeicons/core-free-icons/-/core-free-icons-4.4.0.tgz#4057bf3b06916378d16d76712e2783b163106aa4"
+  integrity sha512-7Mz8bmGoY6tZ6l3C2TXwNMLVSr0I8HPwjjFIERAuJFj3rWwLxdF2ZLkDqdrVuEE1dx5b/VXyIsP4WoSU6Q40KQ==
+
+"@hugeicons/react@^1.1.10":
+  version "1.1.10"
+  resolved "https://registry.yarnpkg.com/@hugeicons/react/-/react-1.1.10.tgz#63b4164123072f964387d61e181418f846fc2d20"
+  integrity sha512-9tAsd92yMVVGP+E+d8cM+wc0VnXuYZHNbWQi7TOe8k2neawmhiaFmVFbzyruejhOMa197/LbgvSED32ayUo3ZA==
+
 "@mantine/core@^9.7.5":
   version "9.7.5"
   resolved "https://registry.yarnpkg.com/@mantine/core/-/core-9.7.5.tgz#ba5698e882d377072a74b5ac328f08cd3c16d699"

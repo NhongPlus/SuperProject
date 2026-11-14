@@ -33,5 +33,11 @@ export interface TemplateProps {
 /** Mỗi template export một object kiểu này. Component bên trong do template tự quyết định. */
 export interface TemplateModule {
   meta: TemplateMeta;
+  /** Bản xem trong khung điện thoại (modal, trang chi tiết) */
   Component: ComponentType<TemplateProps>;
+  /**
+   * Trang demo toàn màn hình (nút "Xem demo"). Nếu không khai báo thì dùng Component.
+   * Dùng khi mẫu có trang riêng hoàn toàn, ví dụ có dữ liệu và hiệu ứng riêng.
+   */
+  DemoPage?: ComponentType;
 }

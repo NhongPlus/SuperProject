@@ -5,7 +5,7 @@ import { MantineProvider, createTheme } from '@mantine/core';
 import '@mantine/core/styles.css';
 import './styles/global.css';
 import App from './App';
-
+import '@mantine/dates/styles.css';
 const theme = createTheme({
   primaryColor: 'pink',
   fontFamily: 'Montserrat, system-ui, sans-serif',
