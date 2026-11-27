@@ -149,11 +149,27 @@ await api(`/invitations/${id}/media/${ticket.media_id}/complete`, {
   - `gallery` và `media_by_id`: tra URL ảnh theo ID.
 - Component mẫu hiện nhận `SampleData` phẳng (`groom`, `bride`, `date`, `time`, `venue`, `address`). Khi nối API phải chuyển từ response này sang.
 
+## Mẫu thiệp: slug của web và key của backend
+
+Backend có đúng 4 mẫu của web (từ 24/11/2026). Key là slug của web đổi `-` thành `_`:
+
+| Slug (URL web, `meta.slug`) | `template_key` gửi API |
+| --- | --- |
+| `dragon-phoenix-red` | `dragon_phoenix_red` |
+| `royal-blue` | `royal_blue` |
+| `cherry-blossom-pink` | `cherry_blossom_pink` |
+| `minimalism-dark-red` | `minimalism_dark_red` |
+
+- Đổi qua lại: `slug.replaceAll('-', '_')` và ngược lại. Gửi slug có `-` cho API → 404 hoặc 422.
+- `GET /templates` trả tên, mô tả, nhóm, và `manifest` của từng mẫu.
+  - Mỗi mẫu có đúng 1 bảng màu, 1 font, 1 nền, lấy từ màu và font đang có trong code component.
+  - Khai đủ 9 phần: `cover`, `greeting`, `couple`, `love_story`, `events`, `countdown`, `gallery`, `gifts`, `guest_notes`.
+- Thêm mẫu mới hoặc thêm lựa chọn màu, font cho mẫu thì báo người giữ backend sửa seed cùng lúc.
+
 ## Chỗ web và backend chưa khớp
 
 | Việc | Hiện trạng |
 | --- | --- |
-| Key mẫu thiệp | Web: `royal-blue`, `dragon-phoenix-red`, `cherry-blossom-pink`, `minimalism-dark-red`. Backend (`GET /templates`): `classic_01`, `minimal_01`, `floral_01`, `vintage_01`; key backend phải là snake_case. Cần chốt danh sách rồi sửa seed bên backend |
 | Route trang thiệp public | Chưa có. README backend gợi ý `/{slug}`, `/{slug}/nha-trai`, `/{slug}/nha-gai`. Trùng với các route của site thì cần thống nhất |
 | Thẻ meta khi chia sẻ link | Web là SPA, nên Zalo và Facebook chỉ thấy thẻ meta chung của `index.html` |
 | Đăng nhập Google, Facebook | Backend v1 chưa có |
