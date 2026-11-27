@@ -12,11 +12,17 @@ import {
 } from '../../features/invitations/invitationHelpers';
 import { useSlugAvailability } from '../../features/invitations/useSlugAvailability';
 import { useInvitation } from '../../features/invitations/useInvitations';
+import { CoupleSection } from '../../features/invitations/content/CoupleSection';
+import { MessagesSection } from '../../features/invitations/content/MessagesSection';
+import { LoveStorySection } from '../../features/invitations/content/LoveStorySection';
+import { SectionsSection } from '../../features/invitations/content/SectionsSection';
 import { EventsSection } from '../../features/invitations/EventsSection';
+import { GiftsSection } from '../../features/invitations/GiftsSection';
 import { MediaSection } from '../../features/invitations/MediaSection';
 import { AlbumsSection } from '../../features/invitations/AlbumsSection';
-import { GiftsSection } from '../../features/invitations/GiftsSection';
-import { getErrorMessage } from '../../services/http';
+import { ApiError, getErrorMessage } from '../../services/http';
+import { NotFoundPage } from '../exception/NotFoundPage';
+import { ForbiddenPage } from '../exception/ForbiddenPage';
 import {
   invitationService,
   type InvitationDto,
@@ -29,6 +35,9 @@ export function InvitationEditPage() {
   const { invitation, etag, error, loading, reload } = useInvitation(id);
   const [busy, setBusy] = useState(false);
   const [actionError, setActionError] = useState<string | null>(null);
+
+  if (!invitation && error instanceof ApiError && error.status === 404) return <NotFoundPage />;
+  if (!invitation && error instanceof ApiError && error.status === 403) return <ForbiddenPage />;
 
   if (!invitation) {
     return (
@@ -78,8 +87,10 @@ export function InvitationEditPage() {
     }
   };
 
+  const shared = { invitation, etag, onChanged: reload };
+
   return (
-    <Container size="sm" py="xl">
+    <Container size="md" py="xl">
       <Button component={Link} to={ROUTES.invitations} variant="subtle" leftSection={<IconArrowLeft size={16} />} mb="md">
         Thiệp của tôi
       </Button>
@@ -108,19 +119,20 @@ export function InvitationEditPage() {
         <EditForm invitation={invitation} etag={etag} onSaved={reload} />
 
         <Divider />
-
-        <MediaSection invitation={invitation} etag={etag} onChanged={reload} />
-
+        <CoupleSection {...shared} />
         <Divider />
-
+        <MessagesSection {...shared} />
+        <Divider />
+        <LoveStorySection {...shared} />
+        <Divider />
+        <SectionsSection {...shared} />
+        <Divider />
+        <MediaSection {...shared} />
+        <Divider />
         <AlbumsSection invitation={invitation} />
-
         <Divider />
-
-        <GiftsSection invitation={invitation} etag={etag} onChanged={reload} />
-
+        <GiftsSection {...shared} />
         <Divider />
-
         <EventsSection invitationId={invitation.id} etag={etag} onChanged={reload} />
 
         <Divider />
@@ -144,39 +156,23 @@ type EditFormProps = {
   onSaved: () => Promise<unknown>;
 };
 
+// Tên thiệp và đường dẫn. Thông tin cô dâu chú rể nằm ở mục riêng bên dưới.
 function EditForm({ invitation, etag, onSaved }: EditFormProps) {
   const [title, setTitle] = useState(invitation.title);
   const [slug, setSlug] = useState(invitation.slug);
-  const [groom, setGroom] = useState(invitation.content.couple?.groom?.full_name ?? '');
-  const [bride, setBride] = useState(invitation.content.couple?.bride?.full_name ?? '');
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
 
   const availability = useSlugAvailability(slug, invitation.slug);
-
   const slugError =
     availability.state === 'taken' || availability.state === 'invalid' || availability.state === 'error'
       ? availability.message
       : null;
 
-  // Chỉ gửi các trường đã đổi (JSON Merge Patch)
-  const buildPatch = (): InvitationUpdateBody => {
-    const patch: InvitationUpdateBody = {};
-    if (title.trim() !== invitation.title) patch.title = title.trim();
-    if (slug !== invitation.slug) patch.slug = slug;
-
-    const g = groom.trim();
-    const b = bride.trim();
-    const currentG = invitation.content.couple?.groom?.full_name ?? '';
-    const currentB = invitation.content.couple?.bride?.full_name ?? '';
-    if (g !== currentG || b !== currentB) {
-      patch.content = { couple: { groom: { full_name: g || null }, bride: { full_name: b || null } } };
-    }
-    return patch;
-  };
-
-  const patch = buildPatch();
+  const patch: InvitationUpdateBody = {};
+  if (title.trim() !== invitation.title) patch.title = title.trim();
+  if (slug !== invitation.slug) patch.slug = slug;
   const hasChanges = Object.keys(patch).length > 0;
   const titleEmpty = title.trim() === '';
   const canSave = hasChanges && !titleEmpty && availability.state === 'available' && !saving;
@@ -202,6 +198,7 @@ function EditForm({ invitation, etag, onSaved }: EditFormProps) {
   return (
     <form onSubmit={onSubmit}>
       <Stack gap="md">
+        <Title order={3}>Thông tin chung</Title>
         {saveError && <Alert color="red">{saveError}</Alert>}
         {saved && !hasChanges && <Alert color="green">Đã lưu.</Alert>}
 
@@ -221,9 +218,6 @@ function EditForm({ invitation, etag, onSaved }: EditFormProps) {
           description={slugError ? undefined : availability.message ?? undefined}
           onChange={(e) => setSlug(normalizeSlugInput(e.currentTarget.value))}
         />
-
-        <TextInput label="Tên chú rể" maxLength={100} value={groom} onChange={(e) => setGroom(e.currentTarget.value)} />
-        <TextInput label="Tên cô dâu" maxLength={100} value={bride} onChange={(e) => setBride(e.currentTarget.value)} />
 
         <Group justify="flex-end">
           <Button type="submit" color="pink" radius="md" loading={saving} disabled={!canSave}>

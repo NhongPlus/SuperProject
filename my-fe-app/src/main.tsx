@@ -14,12 +14,17 @@ import '@fontsource/be-vietnam-pro/500.css';
 import '@fontsource/be-vietnam-pro/600.css';
 import './styles/global.css';
 import App from './App';
+import { ErrorBoundary } from './pages/exception/ErrorBoundary';
 import '@mantine/dates/styles.css';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <MantineProvider theme={theme} defaultColorScheme="light">
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </MantineProvider>
+  <React.StrictMode>
+    <MantineProvider theme={theme} defaultColorScheme="light">
+      <BrowserRouter>
+        <ErrorBoundary>
+          <App />
+        </ErrorBoundary>
+      </BrowserRouter>
+    </MantineProvider>
+  </React.StrictMode>,
 );

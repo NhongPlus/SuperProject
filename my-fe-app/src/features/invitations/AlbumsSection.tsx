@@ -134,6 +134,22 @@ export function AlbumsSection({ invitation }: Props) {
       mediaService.move(invitation.id, m.id, target === NONE ? null : target),
     );
 
+  // Đổi chỗ ảnh với ảnh liền trước/sau trong cùng album đang hiển thị
+  const moveImage = (m: MediaDto, dir: -1 | 1) => {
+    const si = shown.findIndex((x) => x.id === m.id);
+    const target = shown[si + dir];
+    if (si < 0 || !target) return;
+
+    const order = media.filter((x) => x.mime_type.startsWith('image/')).map((x) => x.id);
+    const a = order.indexOf(m.id);
+    const b = order.indexOf(target.id);
+    if (a < 0 || b < 0) return;
+    const tmp = order[a];
+    order[a] = order[b] as string;
+    order[b] = tmp as string;
+    void runAction('reorder', () => mediaService.reorder(invitation.id, order));
+  };
+
   const removePhoto = (m: MediaDto) => {
     if (!window.confirm('Xóa ảnh này?')) return;
     void runAction('remove-photo', () => mediaService.remove(invitation.id, m.id));
@@ -234,6 +250,26 @@ export function AlbumsSection({ invitation }: Props) {
                 allowDeselect={false}
                 disabled={disabled}
               />
+              <Group gap={4} grow>
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  color="gray"
+                  disabled={disabled || shown.indexOf(m) === 0}
+                  onClick={() => moveImage(m, -1)}
+                >
+                  Trước
+                </Button>
+                <Button
+                  size="xs"
+                  variant="subtle"
+                  color="gray"
+                  disabled={disabled || shown.indexOf(m) === shown.length - 1}
+                  onClick={() => moveImage(m, 1)}
+                >
+                  Sau
+                </Button>
+              </Group>
               <Button size="xs" variant="subtle" color="red" disabled={disabled} onClick={() => removePhoto(m)}>
                 Xóa ảnh
               </Button>

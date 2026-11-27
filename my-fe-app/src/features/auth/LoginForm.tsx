@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
+import { PasswordInput, TextInput } from '@mantine/core';
 import { useAuth } from './AuthContext';
 import { useCallApi } from '../../hooks/useCallApi';
 import { getErrorMessage } from '../../services/http';
 import type { LoginBody } from '../../services/auth.service';
 import buttons from '../../styles/buttons.module.css';
 import styles from './auth.module.css';
+import { passwordFieldClassNames, textFieldClassNames } from './fieldClassNames';
+
 
 type Props = { onSwitch: () => void };
 
@@ -27,14 +30,23 @@ export function LoginForm({ onSwitch }: Props) {
       <p className={styles.subtitle}>Chào mừng bạn quay lại.</p>
 
       <form className={styles.form} onSubmit={onSubmit}>
-        <label className={styles.field}>
-          <span>Email</span>
-          <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <label className={styles.field}>
-          <span>Mật khẩu</span>
-          <input type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
+        <TextInput
+          classNames={textFieldClassNames}
+          label="Email"
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.currentTarget.value)}
+        />
+        <PasswordInput
+          classNames={passwordFieldClassNames}
+          label="Mật khẩu"
+          required
+          autoComplete="current-password"
+          value={password}
+          onChange={(e) => setPassword(e.currentTarget.value)}
+        />
         {getErrorMessage(submit.error) && <p className={styles.error}>{getErrorMessage(submit.error)}</p>}
         <button type="submit" className={`${buttons.btn} ${buttons.primary} ${styles.submit}`} disabled={submit.loading}>
           {submit.loading ? 'Đang đăng nhập...' : 'Đăng nhập'}

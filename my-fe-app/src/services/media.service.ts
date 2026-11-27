@@ -77,6 +77,14 @@ export const mediaService = {
       signal,
     }),
 
+  // Sắp xếp lại thứ tự ảnh của thiệp: gửi danh sách id theo thứ tự mới
+  reorder: (invitationId: string, mediaIds: string[], signal?: AbortSignal) =>
+    request<MediaDto[]>(`/invitations/${invitationId}/media/order`, {
+      method: 'PUT',
+      body: { media_ids: mediaIds },
+      signal,
+    }),
+
   // Xóa không cần If-Match
   remove: (invitationId: string, mediaId: string, signal?: AbortSignal) =>
     request<void>(`/invitations/${invitationId}/media/${mediaId}`, { method: 'DELETE', signal }),

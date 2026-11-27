@@ -13,7 +13,7 @@
 .ghost { min-height: 44px; padding: 0 18px; color: var(--cd-ink); font-weight: 500; background: none; border: 0; }
 .linkU {
   display: inline-flex; align-items: center; min-height: 44px;
-  color: var(--cd-ink); font-weight: 500; font-size: 15px; text-decoration: underline;
+  color: var(--cd-ink); font-weight: 500; font-size: 15px; text-decoration: none;
   text-decoration-color: rgba(156,52,89,.45); text-decoration-thickness: 1px; text-underline-offset: 7px;
 }
 .linkU:hover { color: var(--cd-rose); text-decoration-color: var(--cd-rose); }

@@ -1,7 +1,7 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { PublicLayout } from '../components/layout/PublicLayout';
 import { RequireAuth } from '../features/auth/AuthGuards';
-import { ROUTES } from '../config/site';
+import { NotFoundPage } from '../pages/exception/NotFoundPage';
 import { routes } from './routes.config';
 import type { AppRoute } from './types';
 
@@ -27,7 +27,8 @@ export function AppRouter() {
 
       <Route element={<PublicLayout />}>
         {withPublicLayout.map(renderRoute)}
-        <Route path="*" element={<Navigate to={ROUTES.templates} replace />} />
+        {/* Mọi đường dẫn không khớp đều hiện trang 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   );

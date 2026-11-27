@@ -2,6 +2,7 @@ import { Modal } from '@mantine/core';
 import { useAuth } from './AuthContext';
 import { LoginForm } from './LoginForm';
 import { RegisterForm } from './RegisterForm';
+import classes from './auth.module.css';
 
 // Modal đăng nhập/đăng ký dùng chung. Mở từ bất kỳ đâu bằng useAuth().openAuth
 export function AuthModal() {
@@ -17,6 +18,7 @@ export function AuthModal() {
             padding={0}
             overlayProps={{ backgroundOpacity: 0.35 , blur: 9 }}
             transitionProps={{ duration: 100 }}
+            classNames={{ content: classes.content }}
             styles={{
                 // Không cuộn trong modal nên không có thanh cuộn
                 inner: { overflowY: 'hidden' },

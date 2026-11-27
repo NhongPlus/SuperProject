@@ -43,4 +43,22 @@
 .inner::-webkit-scrollbar {
   display: none;
 }
+.content {
+  scrollbar-width: none;
+}
+.content::-webkit-scrollbar {
+  display: none;
+}
 .linkBtn:hover { color: var(--cd-rose); }
+/* Ô nhập của Mantine, giữ kiểu giống ô email/mật khẩu cũ */
+.body .mtLabel {
+  display: block; margin-bottom: 6px;
+  font-size: 14px; font-weight: 500; color: var(--cd-ink);
+}
+.body .mtInput {
+  height: 48px; min-height: 48px; padding: 0 16px; border-radius: 14px;
+  border: 1px solid rgba(58,18,32,.22); background: rgba(255,255,255,.55);
+  font: 400 16px/1 var(--cd-font-body); color: var(--cd-ink);
+}
+.body .mtInput:focus, .body .mtInput:focus-visible { outline: 2px solid var(--cd-wine); outline-offset: 1px; }
+.body .mtPassword { padding-right: 46px; }

@@ -7,6 +7,7 @@ import { TemplateDemoPage } from '../pages/templates/TemplateDemoPage';
 import { AccountPage } from '../pages/account/AccountPage';
 import { InvitationsPage } from '../pages/invitations/InvitationsPage';
 import { InvitationEditPage } from '../pages/invitations/InvitationEditPage';
+import { PublicInvitationPage } from '../pages/public/PublicInvitationPage';
 import { ROUTES } from '../config/site';
 import type { AppRoute } from './types';
 
@@ -24,4 +25,6 @@ export const routes: AppRoute[] = [
   { key: 'create', path: ROUTES.create, component: CreateInvitationPage, layout: 'public', auth: true },
   { key: 'invitations', path: ROUTES.invitations, component: InvitationsPage, layout: 'public', auth: true },
   { key: 'invitationEdit', path: `${ROUTES.invitations}/:id`, component: InvitationEditPage, layout: 'public', auth: true },
+  // Trang khách: đặt cuối cùng để không che các đường dẫn khác
+  { key: 'publicInvitation', path: '/:slug', component: PublicInvitationPage, layout: 'none' },
 ];
